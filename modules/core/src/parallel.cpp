@@ -127,9 +127,9 @@ namespace cv
 {
     ParallelLoopBody::~ParallelLoopBody() {}
 #ifdef HAVE_PTHREADS_PF
-    void parallel_for_pthreads(const cv::Range& range, const cv::ParallelLoopBody& body, double nstripes);
-    size_t parallel_pthreads_get_threads_num();
-    void parallel_pthreads_set_threads_num(int num);
+    // void parallel_for_pthreads(const cv::Range& range, const cv::ParallelLoopBody& body, double nstripes);
+    // size_t parallel_pthreads_get_threads_num();
+    // void parallel_pthreads_set_threads_num(int num);
 #endif
 }
 

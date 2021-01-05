@@ -45,15 +45,15 @@
 
 namespace cv {
 
-static Mutex* __initialization_mutex = NULL;
-Mutex& getInitializationMutex()
-{
-    if (__initialization_mutex == NULL)
-        __initialization_mutex = new Mutex();
-    return *__initialization_mutex;
-}
-// force initialization (single-threaded environment)
-Mutex* __initialization_mutex_initializer = &getInitializationMutex();
+// static Mutex* __initialization_mutex = NULL;
+// Mutex& getInitializationMutex()
+// {
+//     if (__initialization_mutex == NULL)
+//         __initialization_mutex = new Mutex();
+//     return *__initialization_mutex;
+// }
+// // force initialization (single-threaded environment)
+// Mutex* __initialization_mutex_initializer = &getInitializationMutex();
 
 } // namespace cv
 

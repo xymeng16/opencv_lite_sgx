@@ -54,8 +54,8 @@ if(MSVC)
 endif()
 
 set(OPENCV_EXTRA_FLAGS "")
-set(OPENCV_EXTRA_C_FLAGS "-nostdinc -I$(SGX_SDK)/include -I$(SGX_SDK)/include/tlibc -I$(SGX_SDK)/include/libcxx")
-set(OPENCV_EXTRA_CXX_FLAGS "-nostdinc++ -I$(SGX_SDK)/include -I$(SGX_SDK)/include/tlibc -I$(SGX_SDK)/include/libcxx")
+set(OPENCV_EXTRA_C_FLAGS "-nostdinc -fvisibility=hidden -fpie -fstack-protector -I$(SGX_SDK)/include -I$(SGX_SDK)/include/tlibc -I$(SGX_SDK)/include/libcxx")
+set(OPENCV_EXTRA_CXX_FLAGS "-nostdinc++ -fvisibility=hidden -fpie -fstack-protector -I$(SGX_SDK)/include -I$(SGX_SDK)/include/tlibc -I$(SGX_SDK)/include/libcxx")
 set(OPENCV_EXTRA_FLAGS_RELEASE "")
 set(OPENCV_EXTRA_FLAGS_DEBUG "")
 set(OPENCV_EXTRA_EXE_LINKER_FLAGS "")
@@ -175,6 +175,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   endif()
   if(ENABLE_SSE)
     add_extra_compiler_option(-msse)
+  elseif(X86 OR X86_64)
+    add_extra_compiler_option(-mno-sse)
   endif()
   if(ENABLE_SSE2)
     add_extra_compiler_option(-msse2)
@@ -350,8 +352,16 @@ endif()
 if(NOT BUILD_SHARED_LIBS AND CMAKE_COMPILER_IS_GNUCXX AND NOT ANDROID)
   # Android does not need these settings because they are already set by toolchain file
   #set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} stdc++)
-  set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} sgx_tstdc sgx_pthread sgx_tcxx)
+  set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} sgx_tstdc sgx_pthread sgx_tcxx )
   set(OPENCV_EXTRA_FLAGS "-fPIC ${OPENCV_EXTRA_FLAGS}")
+  set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-z,relro,-z,now,-z,noexecstack \
+  -Wl,--no-undefined -nostdlib -nodefaultlibs -nostartfiles -L$(SGX_SDK)/lib \
+  -Wl,--whole-archive -lsgx_trts -Wl,--no-whole-archive \
+  -Wl,--start-group -lsgx_tstdc -lsgx_pthread -lsgx_tcxx -lsgx_tcrypto -l$sgx_tservice -Wl,--end-group \
+  -Wl,-Bstatic -Wl,-Bsymbolic -Wl,--no-undefined \
+  -Wl,-pie,-eenclave_entry -Wl,--export-dynamic \
+  -Wl,--defsym,__ImageBase=0 \
+  ${CMAKE_SHARED_LINKER_FLAGS}")
 endif()
 
 # Add user supplied extra options (optimization, etc...)
