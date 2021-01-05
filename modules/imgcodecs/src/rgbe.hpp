@@ -71,19 +71,19 @@ typedef struct {
 
 /* read or write headers */
 /* you may set rgbe_header_info to null if you want to */
-int RGBE_WriteHeader(FILE *fp, int width, int height, rgbe_header_info *info);
-int RGBE_ReadHeader(FILE *fp, int *width, int *height, rgbe_header_info *info);
+// int RGBE_WriteHeader(FILE *fp, int width, int height, rgbe_header_info *info);
+// int RGBE_ReadHeader(FILE *fp, int *width, int *height, rgbe_header_info *info);
 
 /* read or write pixels */
 /* can read or write pixels in chunks of any size including single pixels*/
-int RGBE_WritePixels(FILE *fp, float *data, int numpixels);
-int RGBE_ReadPixels(FILE *fp, float *data, int numpixels);
+// int RGBE_WritePixels(FILE *fp, float *data, int numpixels);
+// int RGBE_ReadPixels(FILE *fp, float *data, int numpixels);
 
 /* read or write run length encoded files */
 /* must be called to read or write whole scanlines */
-int RGBE_WritePixels_RLE(FILE *fp, float *data, int scanline_width,
-       int num_scanlines);
-int RGBE_ReadPixels_RLE(FILE *fp, float *data, int scanline_width,
-      int num_scanlines);
+// int RGBE_WritePixels_RLE(FILE *fp, float *data, int scanline_width,
+//        int num_scanlines);
+// int RGBE_ReadPixels_RLE(FILE *fp, float *data, int scanline_width,
+//       int num_scanlines);
 
 #endif/*_RGBE_HDR_H_*/

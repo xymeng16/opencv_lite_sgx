@@ -379,11 +379,11 @@ std::cout << tm;
 @endcode
 */
 
-static inline
-std::ostream& operator << (std::ostream& out, const TickMeter& tm)
-{
-    return out << tm.getTimeSec() << "sec";
-}
+// static inline
+// std::ostream& operator << (std::ostream& out, const TickMeter& tm)
+// {
+//     return out << tm.getTimeSec() << "sec";
+// }
 
 /** @brief Returns the number of CPU ticks.
 

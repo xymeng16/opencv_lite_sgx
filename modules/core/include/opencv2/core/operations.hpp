@@ -373,46 +373,46 @@ Ptr<Formatted> format(InputArray mtx, int fmt)
     return Formatter::get(fmt)->format(mtx.getMat());
 }
 
-static inline
-int print(Ptr<Formatted> fmtd, FILE* stream = stdout)
-{
-    int written = 0;
-    fmtd->reset();
-    for(const char* str = fmtd->next(); str; str = fmtd->next())
-        written += fputs(str, stream);
+// static inline
+// int print(Ptr<Formatted> fmtd, FILE* stream = stdout)
+// {
+//     int written = 0;
+//     fmtd->reset();
+//     for(const char* str = fmtd->next(); str; str = fmtd->next())
+//         written += fputs(str, stream);
 
-    return written;
-}
+//     return written;
+// }
 
-static inline
-int print(const Mat& mtx, FILE* stream = stdout)
-{
-    return print(Formatter::get()->format(mtx), stream);
-}
+// static inline
+// int print(const Mat& mtx, FILE* stream = stdout)
+// {
+//     return print(Formatter::get()->format(mtx), stream);
+// }
 
-static inline
-int print(const UMat& mtx, FILE* stream = stdout)
-{
-    return print(Formatter::get()->format(mtx.getMat(ACCESS_READ)), stream);
-}
+// static inline
+// int print(const UMat& mtx, FILE* stream = stdout)
+// {
+//     return print(Formatter::get()->format(mtx.getMat(ACCESS_READ)), stream);
+// }
 
-template<typename _Tp> static inline
-int print(const std::vector<Point_<_Tp> >& vec, FILE* stream = stdout)
-{
-    return print(Formatter::get()->format(Mat(vec)), stream);
-}
+// template<typename _Tp> static inline
+// int print(const std::vector<Point_<_Tp> >& vec, FILE* stream = stdout)
+// {
+//     return print(Formatter::get()->format(Mat(vec)), stream);
+// }
 
-template<typename _Tp> static inline
-int print(const std::vector<Point3_<_Tp> >& vec, FILE* stream = stdout)
-{
-    return print(Formatter::get()->format(Mat(vec)), stream);
-}
+// template<typename _Tp> static inline
+// int print(const std::vector<Point3_<_Tp> >& vec, FILE* stream = stdout)
+// {
+//     return print(Formatter::get()->format(Mat(vec)), stream);
+// }
 
-template<typename _Tp, int m, int n> static inline
-int print(const Matx<_Tp, m, n>& matx, FILE* stream = stdout)
-{
-    return print(Formatter::get()->format(cv::Mat(matx)), stream);
-}
+// template<typename _Tp, int m, int n> static inline
+// int print(const Matx<_Tp, m, n>& matx, FILE* stream = stdout)
+// {
+//     return print(Formatter::get()->format(cv::Mat(matx)), stream);
+// }
 
 //! @endcond
 

@@ -75,7 +75,7 @@ void  RBaseStream::allocate()
 RBaseStream::RBaseStream()
 {
     m_start = m_end = m_current = 0;
-    m_file = 0;
+    // m_file = 0;
     m_block_size = BS_DEF_BLOCK_SIZE;
     m_is_opened = false;
     m_allocated = false;
@@ -91,38 +91,39 @@ RBaseStream::~RBaseStream()
 
 void  RBaseStream::readBlock()
 {
-    setPos( getPos() ); // normalize position
+    // setPos( getPos() ); // normalize position
 
-    if( m_file == 0 )
-    {
-        if( m_block_pos == 0 && m_current < m_end )
-            return;
-        throw RBS_THROW_EOS;
-    }
+    // if( m_file == 0 )
+    // {
+    //     if( m_block_pos == 0 && m_current < m_end )
+    //         return;
+    //     throw RBS_THROW_EOS;
+    // }
 
-    fseek( m_file, m_block_pos, SEEK_SET );
-    size_t readed = fread( m_start, 1, m_block_size, m_file );
-    m_end = m_start + readed;
-    m_current = m_start;
+    // fseek( m_file, m_block_pos, SEEK_SET );
+    // size_t readed = fread( m_start, 1, m_block_size, m_file );
+    // m_end = m_start + readed;
+    // m_current = m_start;
 
-    if( readed == 0 || m_current >= m_end )
-        throw RBS_THROW_EOS;
+    // if( readed == 0 || m_current >= m_end )
+    //     throw RBS_THROW_EOS;
 }
 
 
 bool  RBaseStream::open( const String& filename )
 {
-    close();
-    allocate();
+    // close();
+    // allocate();
 
-    m_file = fopen( filename.c_str(), "rb" );
-    if( m_file )
-    {
-        m_is_opened = true;
-        setPos(0);
-        readBlock();
-    }
-    return m_file != 0;
+    // m_file = fopen( filename.c_str(), "rb" );
+    // if( m_file )
+    // {
+    //     m_is_opened = true;
+    //     setPos(0);
+    //     readBlock();
+    // }
+    // return m_file != 0;
+    return false;
 }
 
 bool  RBaseStream::open( const Mat& buf )
@@ -142,11 +143,11 @@ bool  RBaseStream::open( const Mat& buf )
 
 void  RBaseStream::close()
 {
-    if( m_file )
-    {
-        fclose( m_file );
-        m_file = 0;
-    }
+    // if( m_file )
+    // {
+    //     fclose( m_file );
+    //     m_file = 0;
+    // }
     m_is_opened = false;
     if( !m_allocated )
         m_start = m_end = m_current = 0;
@@ -166,12 +167,12 @@ void  RBaseStream::setPos( int pos )
 {
     assert( isOpened() && pos >= 0 );
 
-    if( !m_file )
-    {
-        m_current = m_start + pos;
-        m_block_pos = 0;
-        return;
-    }
+    // if( !m_file )
+    // {
+    //     m_current = m_start + pos;
+    //     m_block_pos = 0;
+    //     return;
+    // }
 
     int offset = pos % m_block_size;
     m_block_pos = pos - offset;
@@ -335,7 +336,7 @@ int  RMByteStream::getDWord()
 WBaseStream::WBaseStream()
 {
     m_start = m_end = m_current = 0;
-    m_file = 0;
+    // m_file = 0;
     m_block_size = BS_DEF_BLOCK_SIZE;
     m_is_opened = false;
     m_buf = 0;
@@ -381,7 +382,7 @@ void  WBaseStream::writeBlock()
     }
     else
     {
-        fwrite( m_start, 1, size, m_file );
+        // fwrite( m_start, 1, size, m_file );
     }
     m_current = m_start;
     m_block_pos += size;
@@ -390,17 +391,18 @@ void  WBaseStream::writeBlock()
 
 bool  WBaseStream::open( const String& filename )
 {
-    close();
-    allocate();
+    // close();
+    // allocate();
 
-    m_file = fopen( filename.c_str(), "wb" );
-    if( m_file )
-    {
-        m_is_opened = true;
-        m_block_pos = 0;
-        m_current = m_start;
-    }
-    return m_file != 0;
+    // m_file = fopen( filename.c_str(), "wb" );
+    // if( m_file )
+    // {
+    //     m_is_opened = true;
+    //     m_block_pos = 0;
+    //     m_current = m_start;
+    // }
+    // return m_file != 0;
+    return false;
 }
 
 bool  WBaseStream::open( std::vector<uchar>& buf )
@@ -420,11 +422,11 @@ void  WBaseStream::close()
 {
     if( m_is_opened )
         writeBlock();
-    if( m_file )
-    {
-        fclose( m_file );
-        m_file = 0;
-    }
+    // if( m_file )
+    // {
+    //     fclose( m_file );
+    //     m_file = 0;
+    // }
     m_buf = 0;
     m_is_opened = false;
 }

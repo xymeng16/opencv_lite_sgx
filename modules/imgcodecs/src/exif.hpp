@@ -198,7 +198,7 @@ private:
     void parseExif();
     bool checkTagMark() const;
 
-    size_t getFieldSize ( FILE* f ) const;
+    // size_t getFieldSize ( FILE* f ) const;
     size_t getNumDirEntry() const;
     uint32_t getStartOffset() const;
     uint16_t getExifTag( const size_t offset ) const;

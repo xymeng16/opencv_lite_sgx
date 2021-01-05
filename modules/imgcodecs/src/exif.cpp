@@ -119,87 +119,87 @@ ExifEntry_t ExifReader::getTag(const ExifTagName tag)
  *
  *  @return Map where key is tag number and value is ExifEntry_t structure
  */
-std::map<int, ExifEntry_t > ExifReader::getExif()
-{
-    const size_t markerSize = 2;
-    const size_t offsetToTiffHeader = 6; //bytes from Exif size field to the first TIFF header
-    unsigned char appMarker[markerSize];
-    m_exif.erase( m_exif.begin(), m_exif.end() );
+// std::map<int, ExifEntry_t > ExifReader::getExif()
+// {
+//     const size_t markerSize = 2;
+//     const size_t offsetToTiffHeader = 6; //bytes from Exif size field to the first TIFF header
+//     unsigned char appMarker[markerSize];
+//     m_exif.erase( m_exif.begin(), m_exif.end() );
 
-    size_t count;
+//     size_t count;
 
-    if (m_filename.size() == 0)
-    {
-        return m_exif;
-    }
+//     if (m_filename.size() == 0)
+//     {
+//         return m_exif;
+//     }
 
-    FILE* f = fopen( m_filename.c_str(), "rb" );
+//     FILE* f = fopen( m_filename.c_str(), "rb" );
 
-    if( !f )
-    {
-        return m_exif; //Until this moment the map is empty
-    }
+//     if( !f )
+//     {
+//         return m_exif; //Until this moment the map is empty
+//     }
 
-    bool exifFound = false, stopSearch = false;
-    while( ( !feof( f ) ) && !exifFound && !stopSearch )
-    {
-        count = fread( appMarker, sizeof(unsigned char), markerSize, f );
-        if( count < markerSize )
-        {
-            break;
-        }
-        unsigned char marker = appMarker[1];
-        size_t bytesToSkip;
-        size_t exifSize;
-        switch( marker )
-        {
-            //For all the markers just skip bytes in file pointed by followed two bytes (field size)
-            case SOF0: case SOF2: case DHT: case DQT: case DRI: case SOS:
-            case RST0: case RST1: case RST2: case RST3: case RST4: case RST5: case RST6: case RST7:
-            case APP0: case APP2: case APP3: case APP4: case APP5: case APP6: case APP7: case APP8:
-            case APP9: case APP10: case APP11: case APP12: case APP13: case APP14: case APP15:
-            case COM:
-                bytesToSkip = getFieldSize( f );
-                if (bytesToSkip < markerSize) {
-                    fclose(f);
-                    throw ExifParsingError();
-                }
-                fseek( f, static_cast<long>( bytesToSkip - markerSize ), SEEK_CUR );
-                break;
+//     bool exifFound = false, stopSearch = false;
+//     while( ( !feof( f ) ) && !exifFound && !stopSearch )
+//     {
+//         count = fread( appMarker, sizeof(unsigned char), markerSize, f );
+//         if( count < markerSize )
+//         {
+//             break;
+//         }
+//         unsigned char marker = appMarker[1];
+//         size_t bytesToSkip;
+//         size_t exifSize;
+//         switch( marker )
+//         {
+//             //For all the markers just skip bytes in file pointed by followed two bytes (field size)
+//             case SOF0: case SOF2: case DHT: case DQT: case DRI: case SOS:
+//             case RST0: case RST1: case RST2: case RST3: case RST4: case RST5: case RST6: case RST7:
+//             case APP0: case APP2: case APP3: case APP4: case APP5: case APP6: case APP7: case APP8:
+//             case APP9: case APP10: case APP11: case APP12: case APP13: case APP14: case APP15:
+//             case COM:
+//                 bytesToSkip = getFieldSize( f );
+//                 if (bytesToSkip < markerSize) {
+//                     fclose(f);
+//                     throw ExifParsingError();
+//                 }
+//                 fseek( f, static_cast<long>( bytesToSkip - markerSize ), SEEK_CUR );
+//                 break;
 
-            //SOI and EOI don't have the size field after the marker
-            case SOI: case EOI:
-                break;
+//             //SOI and EOI don't have the size field after the marker
+//             case SOI: case EOI:
+//                 break;
 
-            case APP1: //actual Exif Marker
-                exifSize = getFieldSize(f);
-                if (exifSize <= offsetToTiffHeader) {
-                    fclose(f);
-                    throw ExifParsingError();
-                }
-                m_data.resize( exifSize - offsetToTiffHeader );
-                fseek(f, static_cast<long>( offsetToTiffHeader ), SEEK_CUR);
-                count = fread( &m_data[0], sizeof( unsigned char ), exifSize - offsetToTiffHeader, f );
-                exifFound = true;
-                break;
+//             case APP1: //actual Exif Marker
+//                 exifSize = getFieldSize(f);
+//                 if (exifSize <= offsetToTiffHeader) {
+//                     fclose(f);
+//                     throw ExifParsingError();
+//                 }
+//                 m_data.resize( exifSize - offsetToTiffHeader );
+//                 fseek(f, static_cast<long>( offsetToTiffHeader ), SEEK_CUR);
+//                 count = fread( &m_data[0], sizeof( unsigned char ), exifSize - offsetToTiffHeader, f );
+//                 exifFound = true;
+//                 break;
 
-            default: //No other markers are expected according to standard. May be a signal of error
-                stopSearch = true;
-                break;
-        }
-    }
+//             default: //No other markers are expected according to standard. May be a signal of error
+//                 stopSearch = true;
+//                 break;
+//         }
+//     }
 
-    fclose(f);
+//     fclose(f);
 
-    if( !exifFound )
-    {
-        return m_exif;
-    }
+//     if( !exifFound )
+//     {
+//         return m_exif;
+//     }
 
-    parseExif();
+//     parseExif();
 
-    return m_exif;
-}
+//     return m_exif;
+// }
 
 /**
  * @brief Get the size of exif field (required to properly ready whole exif from the file)
@@ -207,16 +207,16 @@ std::map<int, ExifEntry_t > ExifReader::getExif()
  *
  *  @return size of exif field in the file
  */
-size_t ExifReader::getFieldSize (FILE* f) const
-{
-    unsigned char fieldSize[2];
-    size_t count = fread ( fieldSize, sizeof( char ), 2, f );
-    if (count < 2)
-    {
-        return 0;
-    }
-    return ( fieldSize[0] << 8 ) + fieldSize[1];
-}
+// size_t ExifReader::getFieldSize (FILE* f) const
+// {
+//     unsigned char fieldSize[2];
+//     size_t count = fread ( fieldSize, sizeof( char ), 2, f );
+//     if (count < 2)
+//     {
+//         return 0;
+//     }
+//     return ( fieldSize[0] << 8 ) + fieldSize[1];
+// }
 
 /**
  * @brief Filling m_exif member with exif directory elements

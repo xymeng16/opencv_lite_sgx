@@ -54,8 +54,8 @@ if(MSVC)
 endif()
 
 set(OPENCV_EXTRA_FLAGS "")
-set(OPENCV_EXTRA_C_FLAGS "")
-set(OPENCV_EXTRA_CXX_FLAGS "")
+set(OPENCV_EXTRA_C_FLAGS "-nostdinc -I$(SGX_SDK)/include -I$(SGX_SDK)/include/tlibc -I$(SGX_SDK)/include/libcxx")
+set(OPENCV_EXTRA_CXX_FLAGS "-nostdinc++ -I$(SGX_SDK)/include -I$(SGX_SDK)/include/tlibc -I$(SGX_SDK)/include/libcxx")
 set(OPENCV_EXTRA_FLAGS_RELEASE "")
 set(OPENCV_EXTRA_FLAGS_DEBUG "")
 set(OPENCV_EXTRA_EXE_LINKER_FLAGS "")
@@ -349,7 +349,8 @@ endif()
 # Extra link libs if the user selects building static libs:
 if(NOT BUILD_SHARED_LIBS AND CMAKE_COMPILER_IS_GNUCXX AND NOT ANDROID)
   # Android does not need these settings because they are already set by toolchain file
-  set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} stdc++)
+  #set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} stdc++)
+  set(OPENCV_LINKER_LIBS ${OPENCV_LINKER_LIBS} sgx_tstdc sgx_pthread sgx_tcxx)
   set(OPENCV_EXTRA_FLAGS "-fPIC ${OPENCV_EXTRA_FLAGS}")
 endif()
 

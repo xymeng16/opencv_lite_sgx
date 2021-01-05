@@ -70,13 +70,13 @@ namespace cv
         char braces[5];
 
         void (FormattedImpl::*valueToStr)();
-        void valueToStr8u()  { sprintf(buf, "%3d", (int)mtx.ptr<uchar>(row, col)[cn]); }
-        void valueToStr8s()  { sprintf(buf, "%3d", (int)mtx.ptr<schar>(row, col)[cn]); }
-        void valueToStr16u() { sprintf(buf, "%d", (int)mtx.ptr<ushort>(row, col)[cn]); }
-        void valueToStr16s() { sprintf(buf, "%d", (int)mtx.ptr<short>(row, col)[cn]); }
-        void valueToStr32s() { sprintf(buf, "%d", mtx.ptr<int>(row, col)[cn]); }
-        void valueToStr32f() { sprintf(buf, floatFormat, mtx.ptr<float>(row, col)[cn]); }
-        void valueToStr64f() { sprintf(buf, floatFormat, mtx.ptr<double>(row, col)[cn]); }
+        void valueToStr8u()  { snprintf(buf, 32, "%3d", (int)mtx.ptr<uchar>(row, col)[cn]); }
+        void valueToStr8s()  { snprintf(buf, 32, "%3d", (int)mtx.ptr<schar>(row, col)[cn]); }
+        void valueToStr16u() { snprintf(buf, 32, "%d", (int)mtx.ptr<ushort>(row, col)[cn]); }
+        void valueToStr16s() { snprintf(buf, 32, "%d", (int)mtx.ptr<short>(row, col)[cn]); }
+        void valueToStr32s() { snprintf(buf, 32, "%d", mtx.ptr<int>(row, col)[cn]); }
+        void valueToStr32f() { snprintf(buf, 32, floatFormat, mtx.ptr<float>(row, col)[cn]); }
+        void valueToStr64f() { snprintf(buf, 32, floatFormat, mtx.ptr<double>(row, col)[cn]); }
         void valueToStrOther() { buf[0] = 0; }
 
     public:
@@ -103,7 +103,7 @@ namespace cv
             }
             else
             {
-                sprintf(floatFormat, "%%.%dg", std::min(precision, 20));
+                snprintf(floatFormat, 8, "%%.%dg", std::min(precision, 20));
             }
 
             switch(mtx.depth())
@@ -149,10 +149,10 @@ namespace cv
                         }
                         else
                             row = 0;
-                        sprintf(buf, "\n(:, :, %d) = \n", cn+1);
+                        snprintf(buf, 32, "\n(:, :, %d) = \n", cn+1);
                         return buf;
                     }
-                    sprintf(buf, "(:, :, %d) = \n", cn+1);
+                    snprintf(buf, 32, "(:, :, %d) = \n", cn+1);
                     return buf;
                 case STATE_EPILOGUE:
                     state = STATE_FINISHED;

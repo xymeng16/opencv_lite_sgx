@@ -61,9 +61,9 @@
 #ifdef HAVE_LIBPNG_PNG_H
 #include <libpng/png.h>
 #else
-#include <png.h>
+#include "png/png.h"
 #endif
-#include <zlib.h>
+#include "zlib/zlib.h"
 
 #include "grfmt_png.hpp"
 
@@ -88,7 +88,7 @@ PngDecoder::PngDecoder()
     m_color_type = 0;
     m_png_ptr = 0;
     m_info_ptr = m_end_info = 0;
-    m_f = 0;
+    // m_f = 0;
     m_buf_supported = true;
     m_buf_pos = 0;
 }
@@ -106,11 +106,11 @@ ImageDecoder PngDecoder::newDecoder() const
 
 void  PngDecoder::close()
 {
-    if( m_f )
-    {
-        fclose( m_f );
-        m_f = 0;
-    }
+    // if( m_f )
+    // {
+    //     fclose( m_f );
+    //     m_f = 0;
+    // }
 
     if( m_png_ptr )
     {
@@ -163,12 +163,12 @@ bool  PngDecoder::readHeader()
                     png_set_read_fn(png_ptr, this, (png_rw_ptr)readDataFromBuf );
                 else
                 {
-                    m_f = fopen( m_filename.c_str(), "rb" );
-                    if( m_f )
-                        png_init_io( png_ptr, m_f );
+                    // m_f = fopen( m_filename.c_str(), "rb" );
+                    // if( m_f )
+                    //     png_init_io( png_ptr, m_f );
                 }
 
-                if( !m_buf.empty() || m_f )
+                if( !m_buf.empty() )
                 {
                     png_uint_32 wdth, hght;
                     int bit_depth, color_type, num_trans=0;
@@ -339,7 +339,7 @@ bool  PngEncoder::write( const Mat& img, const std::vector<int>& params )
 {
     png_structp png_ptr = png_create_write_struct( PNG_LIBPNG_VER_STRING, 0, 0, 0 );
     png_infop info_ptr = 0;
-    FILE * volatile f = 0;
+    // FILE * volatile f = 0;
     int y, width = img.cols, height = img.rows;
     int depth = img.depth(), channels = img.channels();
     volatile bool result = false;
@@ -363,9 +363,9 @@ bool  PngEncoder::write( const Mat& img, const std::vector<int>& params )
                 }
                 else
                 {
-                    f = fopen( m_filename.c_str(), "wb" );
-                    if( f )
-                        png_init_io( png_ptr, (png_FILE_p)f );
+                    // f = fopen( m_filename.c_str(), "wb" );
+                    // if( f )
+                    //     png_init_io( png_ptr, (png_FILE_p)f );
                 }
 
                 int compression_level = -1; // Invalid value to allow setting 0-9 as valid
@@ -391,7 +391,7 @@ bool  PngEncoder::write( const Mat& img, const std::vector<int>& params )
                     }
                 }
 
-                if( m_buf || f )
+                if( m_buf )
                 {
                     if( compression_level >= 0 )
                     {
@@ -435,7 +435,7 @@ bool  PngEncoder::write( const Mat& img, const std::vector<int>& params )
     }
 
     png_destroy_write_struct( &png_ptr, &info_ptr );
-    if(f) fclose( (FILE*)f );
+    // if(f) fclose( (FILE*)f );
 
     return result;
 }

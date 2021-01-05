@@ -72,7 +72,7 @@ protected:
     void* m_png_ptr;  // pointer to decompression structure
     void* m_info_ptr; // pointer to image information structure
     void* m_end_info; // pointer to one more image information structure
-    FILE* m_f;
+    // FILE* m_f;
     int   m_color_type;
     size_t m_buf_pos;
 };

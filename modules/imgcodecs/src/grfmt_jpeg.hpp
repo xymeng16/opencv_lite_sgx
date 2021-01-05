@@ -68,7 +68,7 @@ public:
 
 protected:
 
-    FILE* m_f;
+    // FILE* m_f;
     void* m_state;
 };
 

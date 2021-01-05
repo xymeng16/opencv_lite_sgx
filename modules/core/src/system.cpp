@@ -65,7 +65,7 @@ Mutex* __initialization_mutex_initializer = &getInitializationMutex();
 
 #if defined ANDROID || defined __linux__ || defined __FreeBSD__
 #  include <unistd.h>
-#  include <fcntl.h>
+// #  include <fcntl.h>
 #  include <elf.h>
 #if defined ANDROID || defined __linux__
 #  include <linux/auxvec.h>
@@ -181,7 +181,7 @@ std::wstring GetTempFileNameWinRT(std::wstring prefix)
 #endif
 #else
 #include <pthread.h>
-#include <sys/time.h>
+// #include <sys/time.h>
 #include <time.h>
 
 #if defined __MACH__ && defined __APPLE__
@@ -409,44 +409,46 @@ bool useOptimized(void)
 
 int64 getTickCount(void)
 {
-#if defined WIN32 || defined _WIN32 || defined WINCE
-    LARGE_INTEGER counter;
-    QueryPerformanceCounter( &counter );
-    return (int64)counter.QuadPart;
-#elif defined __linux || defined __linux__
-    struct timespec tp;
-    clock_gettime(CLOCK_MONOTONIC, &tp);
-    return (int64)tp.tv_sec*1000000000 + tp.tv_nsec;
-#elif defined __MACH__ && defined __APPLE__
-    return (int64)mach_absolute_time();
-#else
-    struct timeval tv;
-    struct timezone tz;
-    gettimeofday( &tv, &tz );
-    return (int64)tv.tv_sec*1000000 + tv.tv_usec;
-#endif
+// #if defined WIN32 || defined _WIN32 || defined WINCE
+//     LARGE_INTEGER counter;
+//     QueryPerformanceCounter( &counter );
+//     return (int64)counter.QuadPart;
+// #elif defined __linux || defined __linux__
+//     struct timespec tp;
+//     clock_gettime(CLOCK_MONOTONIC, &tp);
+//     return (int64)tp.tv_sec*1000000000 + tp.tv_nsec;
+// #elif defined __MACH__ && defined __APPLE__
+//     return (int64)mach_absolute_time();
+// #else
+//     struct timeval tv;
+//     struct timezone tz;
+//     gettimeofday( &tv, &tz );
+//     return (int64)tv.tv_sec*1000000 + tv.tv_usec;
+// #endif
+return -1;
 }
 
 double getTickFrequency(void)
 {
-#if defined WIN32 || defined _WIN32 || defined WINCE
-    LARGE_INTEGER freq;
-    QueryPerformanceFrequency(&freq);
-    return (double)freq.QuadPart;
-#elif defined __linux || defined __linux__
-    return 1e9;
-#elif defined __MACH__ && defined __APPLE__
-    static double freq = 0;
-    if( freq == 0 )
-    {
-        mach_timebase_info_data_t sTimebaseInfo;
-        mach_timebase_info(&sTimebaseInfo);
-        freq = sTimebaseInfo.denom*1e9/sTimebaseInfo.numer;
-    }
-    return freq;
-#else
-    return 1e6;
-#endif
+// #if defined WIN32 || defined _WIN32 || defined WINCE
+//     LARGE_INTEGER freq;
+//     QueryPerformanceFrequency(&freq);
+//     return (double)freq.QuadPart;
+// #elif defined __linux || defined __linux__
+//     return 1e9;
+// #elif defined __MACH__ && defined __APPLE__
+//     static double freq = 0;
+//     if( freq == 0 )
+//     {
+//         mach_timebase_info_data_t sTimebaseInfo;
+//         mach_timebase_info(&sTimebaseInfo);
+//         freq = sTimebaseInfo.denom*1e9/sTimebaseInfo.numer;
+//     }
+//     return freq;
+// #else
+//     return 1e6;
+// #endif
+return -1.0;
 }
 
 #if defined __GNUC__ && (defined __i386__ || defined __x86_64__ || defined __ppc__)
@@ -546,78 +548,79 @@ String format( const char* fmt, ... )
 
 String tempfile( const char* suffix )
 {
-    String fname;
-#ifndef WINRT
-    const char *temp_dir = getenv("OPENCV_TEMP_PATH");
-#endif
+//     String fname;
+// #ifndef WINRT
+//     const char *temp_dir = getenv("OPENCV_TEMP_PATH");
+// #endif
 
-#if defined WIN32 || defined _WIN32
-#ifdef WINRT
-    RoInitialize(RO_INIT_MULTITHREADED);
-    std::wstring temp_dir = GetTempPathWinRT();
+// #if defined WIN32 || defined _WIN32
+// #ifdef WINRT
+//     RoInitialize(RO_INIT_MULTITHREADED);
+//     std::wstring temp_dir = GetTempPathWinRT();
 
-    std::wstring temp_file = GetTempFileNameWinRT(L"ocv");
-    if (temp_file.empty())
-        return String();
+//     std::wstring temp_file = GetTempFileNameWinRT(L"ocv");
+//     if (temp_file.empty())
+//         return String();
 
-    temp_file = temp_dir.append(std::wstring(L"\\")).append(temp_file);
-    DeleteFileW(temp_file.c_str());
+//     temp_file = temp_dir.append(std::wstring(L"\\")).append(temp_file);
+//     DeleteFileW(temp_file.c_str());
 
-    char aname[MAX_PATH];
-    size_t copied = wcstombs(aname, temp_file.c_str(), MAX_PATH);
-    CV_Assert((copied != MAX_PATH) && (copied != (size_t)-1));
-    fname = String(aname);
-    RoUninitialize();
-#else
-    char temp_dir2[MAX_PATH] = { 0 };
-    char temp_file[MAX_PATH] = { 0 };
+//     char aname[MAX_PATH];
+//     size_t copied = wcstombs(aname, temp_file.c_str(), MAX_PATH);
+//     CV_Assert((copied != MAX_PATH) && (copied != (size_t)-1));
+//     fname = String(aname);
+//     RoUninitialize();
+// #else
+//     char temp_dir2[MAX_PATH] = { 0 };
+//     char temp_file[MAX_PATH] = { 0 };
 
-    if (temp_dir == 0 || temp_dir[0] == 0)
-    {
-        ::GetTempPathA(sizeof(temp_dir2), temp_dir2);
-        temp_dir = temp_dir2;
-    }
-    if(0 == ::GetTempFileNameA(temp_dir, "ocv", 0, temp_file))
-        return String();
+//     if (temp_dir == 0 || temp_dir[0] == 0)
+//     {
+//         ::GetTempPathA(sizeof(temp_dir2), temp_dir2);
+//         temp_dir = temp_dir2;
+//     }
+//     if(0 == ::GetTempFileNameA(temp_dir, "ocv", 0, temp_file))
+//         return String();
 
-    DeleteFileA(temp_file);
+//     DeleteFileA(temp_file);
 
-    fname = temp_file;
-#endif
-# else
-#  ifdef ANDROID
-    //char defaultTemplate[] = "/mnt/sdcard/__opencv_temp.XXXXXX";
-    char defaultTemplate[] = "/data/local/tmp/__opencv_temp.XXXXXX";
-#  else
-    char defaultTemplate[] = "/tmp/__opencv_temp.XXXXXX";
-#  endif
+//     fname = temp_file;
+// #endif
+// # else
+// #  ifdef ANDROID
+//     //char defaultTemplate[] = "/mnt/sdcard/__opencv_temp.XXXXXX";
+//     char defaultTemplate[] = "/data/local/tmp/__opencv_temp.XXXXXX";
+// #  else
+//     char defaultTemplate[] = "/tmp/__opencv_temp.XXXXXX";
+// #  endif
 
-    if (temp_dir == 0 || temp_dir[0] == 0)
-        fname = defaultTemplate;
-    else
-    {
-        fname = temp_dir;
-        char ech = fname[fname.size() - 1];
-        if(ech != '/' && ech != '\\')
-            fname = fname + "/";
-        fname = fname + "__opencv_temp.XXXXXX";
-    }
+//     if (temp_dir == 0 || temp_dir[0] == 0)
+//         fname = defaultTemplate;
+//     else
+//     {
+//         fname = temp_dir;
+//         char ech = fname[fname.size() - 1];
+//         if(ech != '/' && ech != '\\')
+//             fname = fname + "/";
+//         fname = fname + "__opencv_temp.XXXXXX";
+//     }
 
-    const int fd = mkstemp((char*)fname.c_str());
-    if (fd == -1) return String();
+//     const int fd = mkstemp((char*)fname.c_str());
+//     if (fd == -1) return String();
 
-    close(fd);
-    remove(fname.c_str());
-# endif
+//     close(fd);
+//     remove(fname.c_str());
+// # endif
 
-    if (suffix)
-    {
-        if (suffix[0] != '.')
-            return fname + "." + suffix;
-        else
-            return fname + suffix;
-    }
-    return fname;
+//     if (suffix)
+//     {
+//         if (suffix[0] != '.')
+//             return fname + "." + suffix;
+//         else
+//             return fname + suffix;
+//     }
+//     return fname;
+return String("NULL");
 }
 
 static ErrorCallback customErrorCallback = 0;
@@ -641,7 +644,7 @@ void error( const Exception& exc )
         const char* errorStr = cvErrorStr(exc.code);
         char buf[1 << 16];
 
-        sprintf( buf, "OpenCV Error: %s (%s) in %s, file %s, line %d",
+        snprintf( buf, 1 << 16, "OpenCV Error: %s (%s) in %s, file %s, line %d",
             errorStr, exc.err.c_str(), exc.func.size() > 0 ?
             exc.func.c_str() : "unknown function", exc.file.c_str(), exc.line );
         // fprintf( stderr, "%s\n", buf );
@@ -774,7 +777,7 @@ CV_IMPL const char* cvErrorStr( int status )
     case CV_OpenGlApiCallError :     return "OpenGL API call";
     };
 
-    sprintf(buf, "Unknown %s code %d", status >= 0 ? "status":"error", status);
+    snprintf(buf, 256, "Unknown %s code %d", status >= 0 ? "status":"error", status);
     return buf;
 }
 

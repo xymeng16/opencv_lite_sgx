@@ -19,11 +19,11 @@ if(NOT ZLIB_FOUND)
   ocv_clear_vars(ZLIB_LIBRARY ZLIB_LIBRARIES ZLIB_INCLUDE_DIRS)
 
   set(ZLIB_LIBRARY zlib)
-  add_subdirectory("${OpenCV_SOURCE_DIR}/3rdparty/zlib")
+  #add_subdirectory("${OpenCV_SOURCE_DIR}/3rdparty/zlib")
   set(ZLIB_INCLUDE_DIRS "${${ZLIB_LIBRARY}_SOURCE_DIR}" "${${ZLIB_LIBRARY}_BINARY_DIR}")
   set(ZLIB_LIBRARIES ${ZLIB_LIBRARY})
 
-  ocv_parse_header2(ZLIB "${${ZLIB_LIBRARY}_SOURCE_DIR}/zlib.h" ZLIB_VERSION)
+ #ocv_parse_header2(ZLIB "${${ZLIB_LIBRARY}_SOURCE_DIR}/zlib.h" ZLIB_VERSION)
 endif()
 
 # --- libtiff (optional, should be searched after zlib) ---
@@ -81,7 +81,7 @@ if(WITH_JPEG)
 
     set(JPEG_LIBRARY libjpeg)
     set(JPEG_LIBRARIES ${JPEG_LIBRARY})
-    add_subdirectory("${OpenCV_SOURCE_DIR}/3rdparty/libjpeg")
+    #add_subdirectory("${OpenCV_SOURCE_DIR}/3rdparty/libjpeg")
     set(JPEG_INCLUDE_DIR "${${JPEG_LIBRARY}_SOURCE_DIR}")
   endif()
 
@@ -167,14 +167,14 @@ if(WITH_PNG)
   endif()
 
   if(NOT PNG_FOUND)
-    ocv_clear_vars(PNG_LIBRARY PNG_LIBRARIES PNG_INCLUDE_DIR PNG_PNG_INCLUDE_DIR HAVE_LIBPNG_PNG_H PNG_DEFINITIONS)
+    #ocv_clear_vars(PNG_LIBRARY PNG_LIBRARIES PNG_INCLUDE_DIR PNG_PNG_INCLUDE_DIR HAVE_LIBPNG_PNG_H PNG_DEFINITIONS)
 
     set(PNG_LIBRARY libpng)
     set(PNG_LIBRARIES ${PNG_LIBRARY})
-    add_subdirectory("${OpenCV_SOURCE_DIR}/3rdparty/libpng")
+    #add_subdirectory("${OpenCV_SOURCE_DIR}/3rdparty/libpng")
     set(PNG_INCLUDE_DIR "${${PNG_LIBRARY}_SOURCE_DIR}")
-    set(PNG_DEFINITIONS "")
-    ocv_parse_header("${PNG_INCLUDE_DIR}/png.h" PNG_VERSION_LINES PNG_LIBPNG_VER_MAJOR PNG_LIBPNG_VER_MINOR PNG_LIBPNG_VER_RELEASE)
+    #set(PNG_DEFINITIONS "")
+    #ocv_parse_header("${PNG_INCLUDE_DIR}/png.h" PNG_VERSION_LINES PNG_LIBPNG_VER_MAJOR PNG_LIBPNG_VER_MINOR PNG_LIBPNG_VER_RELEASE)
   endif()
 
   set(HAVE_PNG YES)

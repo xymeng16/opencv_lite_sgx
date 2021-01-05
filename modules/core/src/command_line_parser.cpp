@@ -71,32 +71,32 @@ static const char* get_type_name(int type)
 
 static void from_str(const String& str, int type, void* dst)
 {
-    std::stringstream ss(str.c_str());
-    if( type == Param::INT )
-        ss >> *(int*)dst;
-    else if( type == Param::BOOLEAN )
-    {
-        std::string temp;
-        ss >> temp;
-        *(bool*) dst = temp == "true";
-    }
-    else if( type == Param::UNSIGNED_INT )
-        ss >> *(unsigned*)dst;
-    else if( type == Param::UINT64 )
-        ss >> *(uint64*)dst;
-    else if( type == Param::FLOAT )
-        ss >> *(float*)dst;
-    else if( type == Param::REAL )
-        ss >> *(double*)dst;
-    else if( type == Param::STRING )
-        *(String*)dst = str;
-    else
-        CV_Error(Error::StsBadArg, "unknown/unsupported parameter type");
+    // std::stringstream ss(str.c_str());
+    // if( type == Param::INT )
+    //     ss >> *(int*)dst;
+    // else if( type == Param::BOOLEAN )
+    // {
+    //     std::string temp;
+    //     ss >> temp;
+    //     *(bool*) dst = temp == "true";
+    // }
+    // else if( type == Param::UNSIGNED_INT )
+    //     ss >> *(unsigned*)dst;
+    // else if( type == Param::UINT64 )
+    //     ss >> *(uint64*)dst;
+    // else if( type == Param::FLOAT )
+    //     ss >> *(float*)dst;
+    // else if( type == Param::REAL )
+    //     ss >> *(double*)dst;
+    // else if( type == Param::STRING )
+    //     *(String*)dst = str;
+    // else
+    //     CV_Error(Error::StsBadArg, "unknown/unsupported parameter type");
 
-    if (ss.fail())
-    {
-        CV_Error_(Error::StsBadArg, ("can not convert: [%s] to [%s]", str.c_str(), get_type_name(type)));
-    }
+    // if (ss.fail())
+    // {
+    //     CV_Error_(Error::StsBadArg, ("can not convert: [%s] to [%s]", str.c_str(), get_type_name(type)));
+    // }
 }
 
 void CommandLineParser::getByName(const String& name, bool space_delete, int type, void* dst) const
@@ -358,80 +358,80 @@ void CommandLineParser::printErrors() const
 {
     if (impl->error)
     {
-        printf("\nERRORS:\n%s\n", impl->error_message.c_str());
-        fflush(stdout);
+        // printf("\nERRORS:\n%s\n", impl->error_message.c_str());
+        // fflush(stdout);
     }
 }
 
 void CommandLineParser::printMessage() const
 {
-    if (impl->about_message != "")
-        printf("%s\n", impl->about_message.c_str());
+    // if (impl->about_message != "")
+    //     printf("%s\n", impl->about_message.c_str());
 
-    printf("Usage: %s [params] ", impl->app_name.c_str());
+    // printf("Usage: %s [params] ", impl->app_name.c_str());
 
-    for (size_t i = 0; i < impl->data.size(); i++)
-    {
-        if (impl->data[i].number > -1)
-        {
-            String name = impl->data[i].keys[0].substr(1, impl->data[i].keys[0].length() - 1);
-            printf("%s ", name.c_str());
-        }
-    }
+    // for (size_t i = 0; i < impl->data.size(); i++)
+    // {
+    //     if (impl->data[i].number > -1)
+    //     {
+    //         String name = impl->data[i].keys[0].substr(1, impl->data[i].keys[0].length() - 1);
+    //         printf("%s ", name.c_str());
+    //     }
+    // }
 
-    printf("\n\n");
+    // printf("\n\n");
 
-    for (size_t i = 0; i < impl->data.size(); i++)
-    {
-        if (impl->data[i].number == -1)
-        {
-            printf("\t");
-            for (size_t j = 0; j < impl->data[i].keys.size(); j++)
-            {
-                String k = impl->data[i].keys[j];
-                if (k.length() > 1)
-                {
-                    printf("--");
-                }
-                else
-                {
-                    printf("-");
-                }
-                printf("%s", k.c_str());
+    // for (size_t i = 0; i < impl->data.size(); i++)
+    // {
+    //     if (impl->data[i].number == -1)
+    //     {
+    //         printf("\t");
+    //         for (size_t j = 0; j < impl->data[i].keys.size(); j++)
+    //         {
+    //             String k = impl->data[i].keys[j];
+    //             if (k.length() > 1)
+    //             {
+    //                 printf("--");
+    //             }
+    //             else
+    //             {
+    //                 printf("-");
+    //             }
+    //             printf("%s", k.c_str());
 
-                if (j != impl->data[i].keys.size() - 1)
-                {
-                    printf(", ");
-                }
-            }
-            String dv = cat_string(impl->data[i].def_value);
-            if (dv.compare("") != 0)
-            {
-                printf(" (value:%s)", dv.c_str());
-            }
-            printf("\n\t\t%s\n", impl->data[i].help_message.c_str());
-        }
-    }
-    printf("\n");
+    //             if (j != impl->data[i].keys.size() - 1)
+    //             {
+    //                 printf(", ");
+    //             }
+    //         }
+    //         String dv = cat_string(impl->data[i].def_value);
+    //         if (dv.compare("") != 0)
+    //         {
+    //             printf(" (value:%s)", dv.c_str());
+    //         }
+    //         printf("\n\t\t%s\n", impl->data[i].help_message.c_str());
+    //     }
+    // }
+    // printf("\n");
 
-    for (size_t i = 0; i < impl->data.size(); i++)
-    {
-        if (impl->data[i].number != -1)
-        {
-            printf("\t");
-            String k = impl->data[i].keys[0];
-            k = k.substr(1, k.length() - 1);
+    // for (size_t i = 0; i < impl->data.size(); i++)
+    // {
+    //     if (impl->data[i].number != -1)
+    //     {
+    //         printf("\t");
+    //         String k = impl->data[i].keys[0];
+    //         k = k.substr(1, k.length() - 1);
 
-            printf("%s", k.c_str());
+    //         printf("%s", k.c_str());
 
-            String dv = cat_string(impl->data[i].def_value);
-            if (dv.compare("") != 0)
-            {
-                printf(" (value:%s)", dv.c_str());
-            }
-            printf("\n\t\t%s\n", impl->data[i].help_message.c_str());
-        }
-    }
+    //         String dv = cat_string(impl->data[i].def_value);
+    //         if (dv.compare("") != 0)
+    //         {
+    //             printf(" (value:%s)", dv.c_str());
+    //         }
+    //         printf("\n\t\t%s\n", impl->data[i].help_message.c_str());
+    //     }
+    // }
 }
 
 std::vector<String> CommandLineParser::Impl::split_range_string(const String& _str, char fs, char ss) const

@@ -80,7 +80,7 @@ protected:
     uchar*  m_start;
     uchar*  m_end;
     uchar*  m_current;
-    FILE*   m_file;
+    // FILE*   m_file;
     int     m_block_size;
     int     m_block_pos;
     bool    m_is_opened;
@@ -136,7 +136,7 @@ protected:
     uchar*  m_current;
     int     m_block_size;
     int     m_block_pos;
-    FILE*   m_file;
+    // FILE*   m_file;
     bool    m_is_opened;
     std::vector<uchar>* m_buf;
 

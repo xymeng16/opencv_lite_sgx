@@ -563,7 +563,8 @@ int cv::getNumberOfCPUs(void)
     static int ncpus = getNumberOfCPUsImpl();
     return ncpus;
 #elif defined __linux__
-    return (int)sysconf( _SC_NPROCESSORS_ONLN );
+    // return (int)sysconf( _SC_NPROCESSORS_ONLN );
+    return 10;
 #elif defined __APPLE__
     int numCPU=0;
     int mib[4];
